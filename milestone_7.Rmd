@@ -475,7 +475,7 @@ rus$brokertable[rus$broker=="Party"]=" A Party Activist"
 rus$brokertable[rus$broker=="Official"]="A Government Official"
 
 RussiaPercTable <- table(rus$brokertable,rus$induce)
-RussiaPercTable
+
 
 ### Panel B
 
@@ -499,7 +499,7 @@ Russia_Survey <- tibble("Broker" = c("Your Employer", "A Party Activist", "A Nei
                                   "Offers You a Gift, Money, or Reward for Voting" = c(374,360,352),
                                   "Tells You That Your Firm or Org. Will Suffer if Turnout Among Employees is Low" = c(372,362,331))  
 
-Russia_Survey
+
 
 
 Venezuela_Survey <- tibble("Broker" = c("Your Employer", "A Party Activist", "A Neighborhood Leader"), 
