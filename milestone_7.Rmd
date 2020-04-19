@@ -83,95 +83,84 @@ In this paper for the most part I was able to replicate all of the graphics. The
 
 # Extension
 
-For my extension, I decided to look at data structure and missing data.
+For my extension, I decided to look at missing data in the data sets and impute data for the regressions used in table 3.  Looking at the tables below, I was able to 
 
 ```{r Missing Data Russia}
 
 # I wanted to look at the missing data in my data
 # set and see if there are any large gaps.
 
-summary(rus)
+#summary(rus)
 
 # Looking at missing values for Russia
 
-gg_miss_var(rus, show_pct = TRUE) +
-  labs(y = "Viewing in terms of percentages is helpful")
+Russia_all_miss <- gg_miss_var(rus, show_pct = TRUE) +
+  labs(title = "Russia - All Missing Data")
 
 
-gg_miss_var(rus,
+Russia_miss_brokers <- gg_miss_var(rus,
             show_pct = TRUE,
-            facet = broker)
+            facet = broker) +
+  labs(title = "Russia - Missing Data by Broker")
 
+Russia_all_miss
+Russia_miss_brokers
 ```
 
+
+We see that for Russia, there is a lot of data missing for percentclose job, cowoerker_weekly, and findnewwork variables. When we further example data missing by broker, there generally seems to be the same variables missing with the exception being empparty for official, which is missing for 100% of the data.
 
 ```{r Missing Data Venezuela}
 
 
-summary(ven)
+#summary(ven)
 
 # Looking at missing values for Russia
 
-gg_miss_var(ven, show_pct = TRUE) +
-  labs(y = "Viewing in terms of percentages is helpful")
+Ven_all_miss <- gg_miss_var(ven, show_pct = TRUE) +
+  labs(title = "Venezuela - All Missing Data")
 
 
-gg_miss_var(ven,
+Ven_miss_brokers <- gg_miss_var(ven,
             show_pct = TRUE,
-            facet = broker)
+            facet = broker) +
+  labs(title = "Venezuela - Missing Data by Broker")
 
+Ven_all_miss
+
+Ven_miss_brokers
 
 ```
 
+We see that for Venezuela, there is a lot of data missing for firmsize, computer, manager, and sector variables. When we further example data missing by broker, there generally seems to be the same variables missing for all of the brokers. 
+
+
+Given that the regression for table 3 uses only data from Russia, I decided to impute the missing values using the mice(), function and re-run the regressions, which can be found in Table 2 of the appendix. When I compare my results with the imputed data and compare it to the original study, I find the same significance and sign of the coefficients, however the magnitude of the coefficients appears to be smaller in general. I think that this just shows the original study is valid and robust, and by being able to not only replicate the data but get very similar results to the original after imputing data, I feel even more confident in the authors' findings.
 
 ```{r imputing data Russia, cache = TRUE}
 
+# Here I am using the mice function in order to get the imputed values
+# for my missing data in the data set.
 
 #imp_1 <- mice(rus, nnet.MaxNWts = 2000)
 
+# Now I am saving that file to be and RDS so that I don't have to reimpute it
+# and can use it again in further analysis
+
 #saveRDS(imp_1, file = "imputed_Russia.rds")
+
+# Here I am reading in the imputed data again
 
 imp_1 <- read_rds("imputed_Russia.rds")
 
-
-full <- complete(imp_1, 1)
-
-
-
-
-gg_miss_var(full,
-            show_pct = TRUE,
-            facet = citysize)
+# Now I am creating a complete data set which 
+# includes all of the imputed values,  I was not sure I
+# I needed to pool them though.
 
 new <- complete(imp_1, action="long", include = TRUE) %>% as_tibble()
 
 
 ```
-
-
-```{r imputing data Venezuela, cache = TRUE}
-
-
-#imp_2 <- mice(ven, nnet.MaxNWts = 2000)
-
-#saveRDS(imp_2, file = "imputed_Venezuela.rds")
-
-imp_2 <- read_rds("imputed_Venezuela.rds")
-
-full2 <- complete(imp_2, 1)
-
-
-gg_miss_var(full2,
-           show_pct = TRUE,
-            facet = citysize)
-
-new2 <- complete(imp_2, action="long", include = TRUE) %>% as_tibble()
-
-
-```
-
-
-
 
 
 # Literature Review
@@ -664,22 +653,22 @@ kable(PanelBSummaryTable)
 # categories of leverage, which in this case are people close they are to the job, 
 # how they use network, how many benefits, and if they are government worker
 
-est1 <-felm(expoutcome~empparty*perclosejob100+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+est1 <-felm(expoutcome~empparty*perclosejob100+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(rus, employed==1))
 
-est2 <-felm(expoutcome~empparty*findnewwork+ citysize +  male + logage + polinterest  + edu + gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+est2 <-felm(expoutcome~empparty*findnewwork+ citysize +  male + logage + polinterest  + edu + gov|factor(strategy)|0|regionid, data=subset(rus, employed==1))
 
-est3 <-felm(expoutcome~empparty*num_benefits+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+est3 <-felm(expoutcome~empparty*num_benefits+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(rus, employed==1))
 
-est4 <-felm(expoutcome~empparty*gov+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+est4 <-felm(expoutcome~empparty*gov+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(rus, employed==1))
 
 # Exact same thing as above except looking now at the same regression
 # for the broker variables.
 
-est5<-felm(expoutcome~empparty*supervisor+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+est5<-felm(expoutcome~empparty*supervisor+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(rus, employed==1))
 
-est6<-felm(expoutcome~empparty*lengthwork+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+est6<-felm(expoutcome~empparty*lengthwork+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(rus, employed==1))
 
-est7<-felm(expoutcome~empparty*coworker_weekly+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+est7<-felm(expoutcome~empparty*coworker_weekly+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(rus, employed==1))
 
 ```
 
@@ -704,7 +693,6 @@ est7<-felm(expoutcome~empparty*coworker_weekly+ citysize +  male + logage + poli
 
 stargazer(est1, est2, est3,est4, est5, est6, est7, header = FALSE,
           dep.var.labels=c("Outcome Respondent Would Vote"),
-          title = "Table 3",
       notes = "\\parbox[t]{10cm}{The outcome variable is the willingness to turnout outcome (five-point scale) from the survey
 experiment. The sample includes only respondents who received the employer or political party broker treatment. The employer treatment collapses the data along the inducement treatment arm of the factorial design used in the experiment. The sample is limited to only those who are employed. Chance of job loss measures the probability a respondent believes he or she will lose his or her job in the next twelve months. Hard to find a new job uses a five-point scale to capture the likelihood that if he or she were to lose his or her job, a respondent could find a similar one; higher values indicate more difficulty. Receives benefits captures the number of in-kind benefits (health care, education, transportation sub- sidies, etc.) respondents received from their employer. Higher values on the three-point scale used in knows supervisor well indicate better familiarity with one’s boss. Number of years employed measures the length of time at one’s work. Socializes with coworkers captures whether respondents spend time with colleagues outside work. All models include the constituent terms and basic demographic characteris- tics (gender, age, education, size of settlement, and an indicator for government employment). Models are estimated via ols and cluster errors at the region level.}",
       single.row = FALSE,
@@ -718,6 +706,65 @@ df = FALSE,
 
 ```
 
+## Regressions with Imputed Data
+
+```{r Imputed Data Table}
+
+# Using Russian data, here the autors are creating a table which shows a fixed effects linear
+# model which is showing the outcome variable of voting, which
+# is used since the paper wants to see the fixed effects based on the different
+# categories of leverage, which in this case are people close they are to the job, 
+# how they use network, how many benefits, and if they are government worker
+
+est11 <-felm(expoutcome~empparty*perclosejob100+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+
+est22 <-felm(expoutcome~empparty*findnewwork+ citysize +  male + logage + polinterest  + edu + gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+
+est33 <-felm(expoutcome~empparty*num_benefits+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+
+est44 <-felm(expoutcome~empparty*gov+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+
+# Exact same thing as above except looking now at the same regression
+# for the broker variables.
+
+est55<-felm(expoutcome~empparty*supervisor+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+
+est66<-felm(expoutcome~empparty*lengthwork+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+
+est77<-felm(expoutcome~empparty*coworker_weekly+ citysize +  male + logage + polinterest  + edu+ gov|factor(strategy)|0|regionid, data=subset(new, employed==1))
+
+```
+
+
+
+
+```{r stargazer new, results="asis", echo=FALSE, warning= FALSE}
+
+# Problem is from emp*party being in every single regression or GOV
+
+# I wasn't getting any parsing issues
+# but I had that error so I put warning equals false
+
+# I had some trouble geting rid of residual standard error
+# and also was a little stuck on putting the demographics
+# and constituent terms like in the original paper. Also,
+# some of the smaller formatting and labelling issues I didn't
+# address but I will fix them in the future.
+
+stargazer(est11, est22, est33,est44, est55, est66, est77, header = FALSE,
+          dep.var.labels=c("Outcome Respondent Would Vote"),
+      notes = "\\parbox[t]{10cm}{The outcome variable is the willingness to turnout outcome (five-point scale) from the survey
+experiment. The sample includes only respondents who received the employer or political party broker treatment. The employer treatment collapses the data along the inducement treatment arm of the factorial design used in the experiment. The sample is limited to only those who are employed. Chance of job loss measures the probability a respondent believes he or she will lose his or her job in the next twelve months. Hard to find a new job uses a five-point scale to capture the likelihood that if he or she were to lose his or her job, a respondent could find a similar one; higher values indicate more difficulty. Receives benefits captures the number of in-kind benefits (health care, education, transportation sub- sidies, etc.) respondents received from their employer. Higher values on the three-point scale used in knows supervisor well indicate better familiarity with one’s boss. Number of years employed measures the length of time at one’s work. Socializes with coworkers captures whether respondents spend time with colleagues outside work. All models include the constituent terms and basic demographic characteris- tics (gender, age, education, size of settlement, and an indicator for government employment). Models are estimated via ols and cluster errors at the region level.}",
+      single.row = FALSE,
+          column.sep.width = "-5pt",
+      keep=c("empparty:perclosejob100","empparty:findnewwork","empparty:num_benefits","empparty:gov","empparty:supervisor","empparty:lengthwork","empparty:coworker_weekly" ),
+      column.labels   = c("Leverage", "Monitoring"),
+df = FALSE,
+      omit.stat=c("rsq","adj.rsq", "ser"),
+        column.separate = c(4, 3),
+      order = c(4,1,2,3,5,6,7))
+
+```
 
 
 ![Original Table 3 in Paper I am replicating](images/tablexample.jpg)
