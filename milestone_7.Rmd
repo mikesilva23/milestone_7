@@ -68,9 +68,6 @@ ven_emp<-subset(ven, employed==1)
 
 I am replicating "Vote Brokers, Clientelist Appeals, and Voter Turnout: Evidence from Russia and Venezuela" by Timothy Frye, Ora John Reuter and David Szakonyi.
 
-# GitHub
-
-All analysis for this paper be found in the [original paper] (https://www.cambridge.org/core/journals/world-politics/article/vote-brokers-clientelist-appeals-and-voter-turnout-evidence-from-russia-and-venezuela/45FE0BE1216FCD8744B02A82919B328A) and [data verse] (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YSVMS2) My Github repo for this project is located under my username, cpatvakanian.  [^1]
 
 # Literature Review
 
@@ -84,6 +81,8 @@ The goal is basically to understand how are monitors pressured by upper manageme
 # What I was able to replicate
 
 In this paper for the most part I was able to replicate all of the graphics. The tables I couldn't use the old code to make so I hand made them, which I think is not a good idea... I also had an issue combining some of the graphs to have the same legend. I also messed up some of the footnotes on the graphics, and instead used captions. On the regression, the variable order isn't like the original, which I couldn't figure out. Also, I had a lot of trouble getting the exact format from R things like GT to Latex/PDF, so that's why I had to resort to manually doing some things.
+
+
 
 # Extension
 
@@ -166,6 +165,9 @@ new <- complete(imp_1, action="long", include = TRUE) %>% as_tibble()
 
 ```
 
+# GitHub
+
+All analysis for this paper be found in the [original paper] (https://www.cambridge.org/core/journals/world-politics/article/vote-brokers-clientelist-appeals-and-voter-turnout-evidence-from-russia-and-venezuela/45FE0BE1216FCD8744B02A82919B328A) and [data verse] (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YSVMS2) My Github repo for this project is located under my username, cpatvakanian.  [^1]
 
 
 
