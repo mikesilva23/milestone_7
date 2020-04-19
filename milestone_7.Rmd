@@ -70,7 +70,11 @@ I am replicating "Vote Brokers, Clientelist Appeals, and Voter Turnout: Evidence
 
 # GitHub
 
-All analysis for this paper be found in the original paper (https://www.cambridge.org/core/journals/world-politics/article/vote-brokers-clientelist-appeals-and-voter-turnout-evidence-from-russia-and-venezuela/45FE0BE1216FCD8744B02A82919B328A) and data verse (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YSVMS2) My Github repo for this project is located under my username, cpatvakanian.  [^1]
+All analysis for this paper be found in the [original paper] (https://www.cambridge.org/core/journals/world-politics/article/vote-brokers-clientelist-appeals-and-voter-turnout-evidence-from-russia-and-venezuela/45FE0BE1216FCD8744B02A82919B328A) and [data verse] (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YSVMS2) My Github repo for this project is located under my username, cpatvakanian.  [^1]
+
+# Literature Review
+
+For this paper I looked at a few papers on voting structure in Russia, as I was able to find less on Venezuela. In "How Capitalism was Built", by Anders Aslund, the literature suggests that in many post soviet countries, voting patterns were heavily influenced by the transition to democracy in instiutions built. In Russia, the case was that there was not enough a big push to transform after communism, and thus the country had to face more difficulties in long term in ensuring fair and free elections. Additionally, in Olga Popova's "Corruption, Voting and Employment Status: Evidence from Russian Parliamentary Elections", Popova finds that controlling for different employment statuses and corruption, people are stil likely to vote differently, and more corruption generally induces people to vote more, which I think is to expected.
 
 # Paper Overview
 For my final replication project, I decided to look at Vote Brokers, Clientelist Appeals, and Voter Turnout: Evidence from Russia and Venezuela, a paper by Timothy Frye, Ora John Reuter and David Szakonyi. The paper looks at two countries, Russia and Venezuela, to what factors, if any, in clientelist exchange. The authors specifically look at the role of brokers and leverage in these two cases. The study uses survey data to explore Russian and Venezuelan brokers and how they perform in monitoring voting.
@@ -163,9 +167,7 @@ new <- complete(imp_1, action="long", include = TRUE) %>% as_tibble()
 ```
 
 
-# Literature Review
 
-For this paper I looked at a few papers on voting structure in Russia, as I was able to find less on Venezuela. In "How Capitalism was Built", by Anders Aslund, the literature suggests that in many post soviet countries, voting patterns were heavily influenced by the transition to democracy in instiutions built. In Russia, the case was that there was not enough a big push to transform after communism, and thus the country had to face more difficulties in long term in ensuring fair and free elections. Additionally, in Olga Popova's "Corruption, Voting and Employment Status: Evidence from Russian Parliamentary Elections", Popova finds that controlling for different employment statuses and corruption, people are stil likely to vote differently, and more corruption generally induces people to vote more, which I think is to expected.
 
 # References
 
@@ -768,4 +770,4 @@ df = FALSE,
 
 
 ![Original Table 3 in Paper I am replicating](images/tablexample.jpg)
-[^1]: [(https://github.com/cpatvakanian/milestone_6)] 
+[^1]: [(https://github.com/cpatvakanian/milestone_7)] 
